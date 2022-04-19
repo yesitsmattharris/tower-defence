@@ -16,7 +16,7 @@ func _ready():
 	
 	for i in get_tree().get_nodes_in_group("build_buttons"):
 		i.connect("pressed", self, "initiate_build_mode", [i.get_name()])
-	start_next_wave() # TODO add start button
+
 
 func _process(delta):
 	if build_mode:
@@ -39,6 +39,7 @@ func start_next_wave():
 	yield(get_tree().create_timer(0.2), "timeout")
 	spawn_enemies(wave_data)
 	
+	
 func retrieve_wave_data() -> Array:
 	var wave_data = [["BlueTank", 0.7], ["BlueTank", 0.1]] # TODO Make dynamic
 	current_wave += 1
@@ -51,6 +52,7 @@ func spawn_enemies(wave_data: Array):
 		var new_enemy : PathFollow2D = load("res://Scenes/Enemies/" + i[0] + ".tscn").instance()
 		map_node.get_node("Path").add_child(new_enemy, true)
 		yield(get_tree().create_timer(i[1]), "timeout")
+	
 	
 ##
 ## Building Functions
