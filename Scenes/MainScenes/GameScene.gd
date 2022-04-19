@@ -60,7 +60,7 @@ func spawn_enemies(wave_data: Array):
 func cancel_build_mode():
 	build_mode = false
 	build_valid = false
-	get_node("UI/TowerPreview").queue_free()
+	get_node("UI/TowerPreview").free()
 	
 	
 func verify_and_build():
@@ -75,6 +75,8 @@ func verify_and_build():
 
 
 func initiate_build_mode(tower_type):
+	if build_mode:
+		cancel_build_mode()
 	build_type = tower_type + "T1"
 	build_mode = true
 	(get_node("UI") as UI).set_tower_preview(build_type, get_global_mouse_position())
