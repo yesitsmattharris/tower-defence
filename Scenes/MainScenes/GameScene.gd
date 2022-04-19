@@ -12,7 +12,7 @@ var enemies_in_wave : int = 0
 
 
 func _ready():
-	map_node = get_node("Map1") # TODO make dynamic
+	map_node = $Map1 # TODO make dynamic
 	
 	for i in get_tree().get_nodes_in_group("build_buttons"):
 		i.connect("pressed", self, "initiate_build_mode", [i.get_name()])
@@ -60,7 +60,7 @@ func spawn_enemies(wave_data: Array):
 func cancel_build_mode():
 	build_mode = false
 	build_valid = false
-	get_node("UI/TowerPreview").free()
+	$UI/TowerPreview.free()
 	
 	
 func verify_and_build():
@@ -70,6 +70,7 @@ func verify_and_build():
 		new_tower.position = build_location
 		new_tower.built = true
 		new_tower.type = build_type
+		new_tower.category = GameData.tower_data[build_type]["category"]
 		map_node.get_node("Turrets").add_child(new_tower, true)
 		# TODO deduct cash
 		# TODO update cash label
@@ -80,7 +81,7 @@ func initiate_build_mode(tower_type):
 		cancel_build_mode()
 	build_type = tower_type + "T1"
 	build_mode = true
-	(get_node("UI") as UI).set_tower_preview(build_type, get_global_mouse_position())
+	($UI as UI).set_tower_preview(build_type, get_global_mouse_position())
 
 	
 func update_tower_preview():
@@ -91,9 +92,9 @@ func update_tower_preview():
 	
 	# -1 means tile is empty (and therefore a valid location to place a new tower)
 	if tower_exclusion.get_cellv(current_tile) == -1:
-		(get_node("UI") as UI).update_tower_preview(tile_position, "#ad54ff3c")
+		($UI as UI).update_tower_preview(tile_position, "#ad54ff3c")
 		build_valid = true
 		build_location = tile_position
 	else:
-		(get_node("UI") as UI).update_tower_preview(tile_position, "#adff4545")
+		($UI as UI).update_tower_preview(tile_position, "#adff4545")
 		build_valid = false
