@@ -17,7 +17,7 @@ func _ready():
 func _physics_process(_delta):
 	if enemy_array.size() > 0 and built:
 		select_enemy()
-		if not ($AnimationPlayer as AnimationPlayer).is_playing():
+		if !has_node('AnimationPlayer') or not ($AnimationPlayer as AnimationPlayer).is_playing():
 			turn()
 		if ready:
 			fire()
@@ -57,12 +57,17 @@ func fire_gun():
 	
 	
 func fire_missile():
+	# TODO spawn missile and move it toward enemy
+	# TODO check how many missiles left and respawn
+
 	pass
 	
 
 func _on_Range_body_entered(body : KinematicBody2D):
-	enemy_array.append(body.get_parent())
+	if body.get_parent().is_in_group('enemy'):
+		enemy_array.append(body.get_parent())
 
 
 func _on_Range_body_exited(body : KinematicBody2D):
+	if body.get_parent().is_in_group('enemy'):
 		enemy_array.erase(body.get_parent())
