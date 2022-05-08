@@ -4,6 +4,8 @@ extends CanvasLayer
 
 onready var hp_bar = $HUD/InfoBar/H/HP
 onready var hp_bar_tween = $HUD/InfoBar/H/HP/Tween
+onready var money = $HUD/InfoBar/H/Money
+onready var money_tween = $HUD/InfoBar/H/Money/Tween
 
 
 func set_tower_preview(tower_type, mouse_position):
@@ -70,3 +72,20 @@ func update_health_bar(base_health : int):
 		hp_bar.set_tint_progress("e1be32")
 	else:
 		hp_bar.set_tint_progress("e11e1e")
+
+
+func update_money_amount(amount : int):
+	var current_money = (money.get_text() as int)
+	var updated_money = current_money + amount
+	money.set_text(str(updated_money))
+
+
+func has_enough_money(money_required : int) -> bool:
+	return money_required <= (money.get_text() as int)
+
+
+func not_enough_money():
+	money_tween.interpolate_property(money, "custom_colors/font_color", Color(1, 1, 1, 1), Color(1, 0, 0, 1), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	money_tween.start()
+	money_tween.interpolate_property(money, "custom_colors/font_color", Color(1, 0, 0, 1), Color(1, 1, 1, 1), 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, 0.2)
+	money_tween.start()
