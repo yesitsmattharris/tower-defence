@@ -139,6 +139,8 @@ text = "100"
 align = 2
 valign = 1
 
+[node name="Tween" type="Tween" parent="UI/HUD/InfoBar/H/Money"]
+
 [node name="Icon" type="TextureRect" parent="UI/HUD/InfoBar/H"]
 margin_left = 746.0
 margin_right = 806.0

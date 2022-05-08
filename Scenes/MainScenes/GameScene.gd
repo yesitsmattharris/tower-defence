@@ -70,14 +70,19 @@ func cancel_build_mode():
 func verify_and_build():
 	if build_valid:
 		# TODO Test to verify player has enough cash
-		var new_tower: Node2D = load("res://Scenes/Turrets/" + build_type + ".tscn").instance()
-		new_tower.position = build_location
-		new_tower.built = true
-		new_tower.type = build_type
-		new_tower.category = GameData.tower_data[build_type]["category"]
-		map_node.get_node("Turrets").add_child(new_tower, true)
-		# TODO deduct cash
-		# TODO update cash label
+		var amount = GameData.tower_data[build_type]["cost"]
+		if ($UI as UI).has_enough_money(amount):
+			($UI as UI).update_money_amount(-amount)
+			var new_tower: Node2D = load("res://Scenes/Turrets/" + build_type + ".tscn").instance()
+			new_tower.position = build_location
+			new_tower.built = true
+			new_tower.type = build_type
+			new_tower.category = GameData.tower_data[build_type]["category"]
+			map_node.get_node("Turrets").add_child(new_tower, true)
+		else:
+			# TODO display to player
+			print("not enough money!")
+			($UI as UI).not_enough_money()
 
 
 func initiate_build_mode(tower_type):
@@ -109,4 +114,4 @@ func on_base_damage(damage : int):
 	if base_health <= 0:
 		emit_signal("game_finished", false)
 	else:
-		$UI.update_health_bar(base_health)
+		($UI as UI).update_health_bar(base_health)
